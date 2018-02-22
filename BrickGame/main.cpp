@@ -323,6 +323,15 @@ void pauseFunction()
 	}
 }
 
+void borrarCursor()
+{
+	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO cursor;
+	cursor.dwSize = 100;
+	cursor.bVisible = FALSE;
+	SetConsoleCursorInfo(consoleHandle, &cursor);
+}
+
 //Imprime en Pantalla el arreglo que conforma el mapa y comienza el ciclo
 void comenzarJuego()
 {
@@ -342,6 +351,7 @@ void comenzarJuego()
 	bool running = true;//Variable que mantiene el juego corriendo
 	while (running)
 	{
+		borrarCursor();
 		reiniciarMapa();
 		mostrarDatos();
 		CE.generarEnemigo();
