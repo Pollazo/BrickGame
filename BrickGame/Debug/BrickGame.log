@@ -1,0 +1,6 @@
+﻿  main.cpp
+c:\users\diego\source\repos\brickgame\brickgame\main.cpp(22): warning C4309: 'initializing': truncation of constant value
+c:\users\diego\source\repos\brickgame\brickgame\main.cpp(202): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\diego\source\repos\brickgame\brickgame\main.cpp(285): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\diego\source\repos\brickgame\brickgame\main.cpp(394): warning C4018: '<': signed/unsigned mismatch
+  BrickGame.vcxproj -> C:\Users\Diego\source\repos\BrickGame\Debug\BrickGame.exe
