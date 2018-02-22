@@ -188,11 +188,13 @@ public:
 //	cv.notify_one();
 //}
 
+bool tecladoRun;
 //Detecta el estado del teclado y realiza los movimientos
 //Incluye pausa y aceleración, además de movimientos a los lados
 void inputs(CarroJugador *carro)
 {
-	while(1){
+	tecladoRun = true;
+	while(tecladoRun){
 		if (GetAsyncKeyState(VK_LEFT) & (0x8000 != 0))
 			carro->movIzq();
 		if (GetAsyncKeyState(VK_RIGHT) & (0x8000 != 0))
@@ -273,9 +275,11 @@ void puntajeActualizar(CarroEnemigo *CE, CarroJugador *CJ)
 	}
 }
 
+bool tiempoContRun;
 void tiempoCont()
 {
-	while (1)
+	tiempoContRun = true;
+	while (tiempoContRun)
 	{
 		tiempo++;
 
@@ -322,6 +326,8 @@ void pauseFunction()
 //Imprime en Pantalla el arreglo que conforma el mapa y comienza el ciclo
 void comenzarJuego()
 {
+	tiempoContRun = true;
+	
 	system("cls");
 	nivel = 1;
 	tiempoCiclo = 500;
@@ -373,6 +379,8 @@ void comenzarJuego()
 	}
 	teclado.detach();
 	tiempo2.detach();
+	tecladoRun = false;
+	tiempoContRun = false;
 	auto tmp = historial.begin();
 	tmp = historial.insert(tmp, puntaje);
 	puntaje = 0;
@@ -413,6 +421,7 @@ void menu()
 	gotoXY(16, 8);
 	std::cout << "3 - Salir";
 
+	gotoXY(21, 10);
 	int opcion;
 	std::cin >> opcion;
 
