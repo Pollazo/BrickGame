@@ -13,10 +13,11 @@
 int TAM_ARREGLO_X = 11;
 int TAM_ARREGLO_Y = 20;
 int vidas = 3;//Cantidad de errores posibles
-int nivel = 1;
-int tiempo = 0;
-int puntaje = 0;
-std::vector<int> historial;
+int nivel = 1;//contado de niveles durante el juego
+int tiempo1 = 0;//contador del tiempo durante el juego ara referencia de los niveles
+int tiempo2 = 0;//Contador mostrado en la pantalla
+int puntaje = 0;//contador de puntaje durante el juego
+std::vector<int> historial;//vector usado para guardar los datos de los juegos
 int tiempoCiclo = 500;//Tiempo por cada ciclo, usado en el sleep
 bool carroEnemigo;//Comprueba si hay un carro enemigo en la pantalla
 char cuadros = 178;//Código ASCII para cuadros
@@ -60,13 +61,14 @@ void reiniciarMapa()
 		
 }
 
+//Funcion usada para imprimir en pantalla con coordenadas
 void imprimirEnPantalla(int x, int y)
 {
 	if ((y >= 0) && (y < 20))
 		mapa[x][y] = cuadros;
 }
 
-//Clase del carro enemigo
+//Clase del carro enemigo y sus funciones respectivas
 class CarroEnemigo
 {
 public:
@@ -224,7 +226,7 @@ void inputs(CarroJugador *carro)
 	}
 }
 
-void puntajeActualizar(CarroEnemigo *CE, CarroJugador *CJ)
+void puntajeActualizar(CarroEnemigo *CE, CarroJugador *CJ)//Maneja el puntaje según la colisión
 {
 	if (CE->YCarroEnem == 25)
 	{
@@ -276,25 +278,26 @@ void puntajeActualizar(CarroEnemigo *CE, CarroJugador *CJ)
 }
 
 bool tiempoContRun;
-void tiempoCont()
+void tiempoCont()//Maneja el tiempo durante la partida
 {
 	tiempoContRun = true;
 	while (tiempoContRun)
 	{
-		tiempo++;
+		tiempo1++;
+		tiempo2++;
 
-		if ((tiempo == 21) && (nivel != 10))
+		if ((tiempo1 == 21) && (nivel != 10))
 		{
 			nivel++;
 			tiempoCiclo = tiempoCiclo * 0.7;
-			tiempo = 0;
+			tiempo1 = 0;
 			system("cls");
 		}
 		Sleep(1000);
 	}
 }
 
-void mostrarDatos()
+void mostrarDatos()//Muestra los datos durante la partida
 {
 	gotoXY(15, 5);
 	std::cout << "VIDAS: " << vidas;
@@ -303,14 +306,14 @@ void mostrarDatos()
 	std::cout << "NIVEL: " << nivel;
 
 	gotoXY(15, 9);
-	std::cout << "TIEMPO: " << tiempo;
+	std::cout << "TIEMPO: " << tiempo2;
 
 	gotoXY(15, 11);
 	std::cout << "PUNTAJE: " << puntaje;
 }
 
 
-void pauseFunction()
+void pauseFunction()//Pausa el juego dentro del while loop con la tecla 'P'
 {
 	if (GetAsyncKeyState(0x50) & (0x8000 != 0))
 	{
@@ -323,7 +326,7 @@ void pauseFunction()
 	}
 }
 
-void borrarCursor()
+void borrarCursor()//Borra el cursor durante el juego
 {
 	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_CURSOR_INFO cursor;
@@ -340,13 +343,14 @@ void comenzarJuego()
 	system("cls");
 	nivel = 1;
 	tiempoCiclo = 500;
-	tiempo = 0;
+	tiempo1 = 0;
+	tiempo2 = 0;
 	vidas = 3;
 	CarroJugador CJ = CarroJugador();
 	CarroEnemigo CE = CarroEnemigo();
 
 	std::thread teclado(inputs, &CJ);//Hilo que detecta el estado del teclado
-	std::thread tiempo2(tiempoCont);
+	std::thread tiempo3(tiempoCont);
 	
 	bool running = true;//Variable que mantiene el juego corriendo
 	while (running)
@@ -388,7 +392,7 @@ void comenzarJuego()
 		Sleep(tiempoCiclo);
 	}
 	teclado.detach();
-	tiempo2.detach();
+	tiempo3.detach();
 	tecladoRun = false;
 	tiempoContRun = false;
 	auto tmp = historial.begin();
